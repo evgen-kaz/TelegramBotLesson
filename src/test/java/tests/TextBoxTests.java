@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Selenide.executeJavaScript;
 import static pages.TextBoxPage.*;
 
 @Tag("Registration")
-public class TextBoxTests extends TestBase{
+public class TextBoxTests extends TestBase {
     TextBoxPage textBoxPage = new TextBoxPage();
 
     @Test
@@ -20,12 +20,15 @@ public class TextBoxTests extends TestBase{
         textBoxPage.setFirstName(firstName)
                 .setEmail(email)
                 .setCurrentAddress(currentAddress)
-                .setPermanentAddress(permanentAddress)
-                .clickButton()
+                .setPermanentAddress(permanentAddress);
+        textBoxPage.openPage();
+        executeJavaScript("$('#fixedban').remove()");
+        executeJavaScript("$('footer').remove()");
+        executeJavaScript("window.onloadCallback = function() { console.log('Fake reCAPTCHA onloadCallback called'); };");
+        textBoxPage.clickButton()
                 .checkResult("Name:", firstName)
                 .checkResult("Email:", email)
                 .checkResult("Current Address :", currentAddress)
                 .checkResult("Permananet Address :", permanentAddress);
     }
 }
-
